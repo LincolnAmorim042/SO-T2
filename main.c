@@ -99,15 +99,7 @@ void getop(char* str,FILE *f){
     if (strcmp(str,"syscall")!=0){
         if (fscanf(f, "%s", tx2) != EOF) {
             pt=strtok(tx2, ",");
-            if (strcmp(str, "add") == 0) {
-                oprt.tipo = r;
-                oprt.op = 0;
-                oprt.func = 0x20;
-                oprt.shamp = 0;
-                instR3(pt);
-                return;
-            }
-            else if(strcmp(str, "and") == 0) {
+            if(strcmp(str, "and") == 0) {
                 oprt.tipo = r;
                 oprt.op = 0;
                 oprt.func = 0x24;
@@ -191,6 +183,14 @@ void getop(char* str,FILE *f){
                 pt = strtok(NULL,",");
                 if((i=pulaIni(pt))>=0)pt=pt+i;
                 oprt.shamp = (u_int8_t) atoi(pt);
+                return;
+            }
+            else if (strcmp(str, "add") == 0) {
+                oprt.tipo = r;
+                oprt.op = 0;
+                oprt.func = 0x20;
+                oprt.shamp = 0;
+                instR3(pt);
                 return;
             }
             else if (strcmp(str, "addi") == 0) {
