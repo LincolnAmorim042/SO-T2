@@ -96,11 +96,7 @@ void getop(char* str,FILE *f){
     char* pt;
     char tx2[50];
     memset(tx2,0,50);
-    if (strcmp(str,"syscall")==0){
-        oprt.op = 0;
-        oprt.end = 12;
-        oprt.tipo = j;
-    }else {
+    if (strcmp(str,"syscall")!=0){
         if (fscanf(f, "%s", tx2) != EOF) {
             pt=strtok(tx2, ",");
             if (strcmp(str, "add") == 0) {
@@ -109,36 +105,6 @@ void getop(char* str,FILE *f){
                 oprt.func = 0x20;
                 oprt.shamp = 0;
                 instR3(pt);
-                return;
-            }
-            else if (strcmp(str, "addi") == 0) {
-                oprt.tipo = i;
-                oprt.op = 8;
-                instI3ts(pt);
-                return;
-            }
-            else if (strcmp(str, "sub") == 0) {
-                oprt.tipo = r;
-                oprt.op = 0;
-                oprt.func = 0x22;
-                oprt.shamp = 0;
-                instR3(pt);
-                return;
-            }
-            else if (strcmp(str, "mult") == 0) {
-                oprt.tipo = r;
-                oprt.op = 0;
-                oprt.func = 0x18;
-                oprt.shamp = 0;
-                instR2(pt);
-                return;
-            }
-            else if(strcmp(str, "div") == 0) {
-                oprt.tipo = r;
-                oprt.op = 0;
-                oprt.func = 0x1a;
-                oprt.shamp = 0;
-                instR2(pt);
                 return;
             }
             else if(strcmp(str, "and") == 0) {
@@ -227,6 +193,37 @@ void getop(char* str,FILE *f){
                 oprt.shamp = (u_int8_t) atoi(pt);
                 return;
             }
+            else if (strcmp(str, "addi") == 0) {
+                oprt.tipo = i;
+                oprt.op = 8;
+                instI3ts(pt);
+                return;
+            }
+            else if (strcmp(str, "sub") == 0) {
+                oprt.tipo = r;
+                oprt.op = 0;
+                oprt.func = 0x22;
+                oprt.shamp = 0;
+                instR3(pt);
+                return;
+            }
+            else if (strcmp(str, "mult") == 0) {
+                oprt.tipo = r;
+                oprt.op = 0;
+                oprt.func = 0x18;
+                oprt.shamp = 0;
+                instR2(pt);
+                return;
+            }
+            else if(strcmp(str, "div") == 0) {
+                oprt.tipo = r;
+                oprt.op = 0;
+                oprt.func = 0x1a;
+                oprt.shamp = 0;
+                instR2(pt);
+                return;
+            }
+            
             else if(strcmp(str, "j") == 0) {
                 oprt.tipo = j;
                 oprt.op = 2;
@@ -352,6 +349,10 @@ void getop(char* str,FILE *f){
                 oprt.end = 0;
             }
         }
+    } else {
+        oprt.op = 0;
+        oprt.end = 12;
+        oprt.tipo = j;
     }
 }
 
@@ -360,7 +361,7 @@ int main(int argv, char **argc) {
     FILE *fr, *fw;
 
     if(argv != 2){
-        perror("uso: nomearquivo\n");
+        perror("uso: nomearquivo.mips\n");
         return 1;
     }
 
